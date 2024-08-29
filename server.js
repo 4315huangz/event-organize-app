@@ -1,17 +1,36 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import express from "express";
-
 const app = express();
-
 app.use(express.json());
+import mongoose from "mongoose";
+import morgan from "morgan";
+if(process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
-app.get('/', (req, res) => {
-    res.send('hello world');
+//import routers
+import eventRouter from './routes/eventRouter.js';
+app.use('/api/v1/events', eventRouter);
+
+app.use('*', (req, res) => {
+    res.status(404).json({msg: "Not found"});
 });
 
-app.post('/', (req, res) => {
-    console.log(req);
-    res.json({message: 'data received', data: req.body});
-})
-app.listen(5100, () => {
-    console.log("server is running");
-}) 
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500).json({msg: "Something went wrong"});
+}); 
+
+//Connect to mongoDB
+const port = process.env.PORT || 5100;
+console.log(process.env.MONGO_URL);
+try {
+    await mongoose.connect(process.env.MONGO_URL);
+    app.listen(port, () => {
+        console.log(`Server running on ${port}...`);
+    });
+} catch (err) {
+    console.log(err);
+    process.exit(1);
+}
