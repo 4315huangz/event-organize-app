@@ -1,48 +1,34 @@
-import { nanoid } from "nanoid";
+import { NotFoundError } from "../errors/customErrors.js";
 import Event from "../models/EventModels.js";
-
+import { StatusCodes } from "http-status-codes";
 
 export const getAllEvents = async (req, res) => {
-    res.status(200).json({events});
+    const events = await Event.find({});
+    res.status(StatusCodes.OK).json({ events });
+};
+
+export const createEvent = async (req, res) => {
+    const event = await Event.create(req.body);
+    res.status(StatusCodes.CREATED).json({event});
 };
 
 export const getEvent = async (req, res) => {
     const {id} = req.params;
-    const event = events.find((event) => event.id === id);
-    if(!event) {
-        return res.status(404).json({msg: `Not find event with id ${id}`});
-    }
-    res.status(200).json({event});
-};
-
-export const createEvent = async (req, res) => {
-    const { name, location } = req.body;
-    const event = await Event.create({name, location});
-    res.status(201).json({event});
+    const event = await Event.findById(id);
+    if(!event) throw new NotFoundError(`No event find with id ${id}`);
+    res.status(StatusCodes.OK).json({event});
 };
 
 export const deleteEvent = async (req, res) => {
     const {id} = req.params;
-    const event = events.find((event) => event.id === id);
-    if(!event) {
-        return res.status(404).json({msg: `Not find evnet with id ${id}`})
-    }
-    const newEvents = events.filter((event) => event.id !== id);
-    events = newEvents;
-    res.status(200).json({msg: "Job is deleted"});
+    const removedEvent = await Event.findByIdAndDelete(id);
+    if(!removedEvent) throw new NotFoundError(`No event find with id ${id}`);
+    res.status(StatusCodes.OK).json({msg: "Job is deleted", event: removedEvent});
 };
 
 export const updateEvent = async (req, res) => {
-    const { name, location } = req.body;
-    if(!name || !location) {
-        return res.status(400).json({msg: "Please provide name and location" });
-    }
     const {id} = req.params;
-    const event = events.find((event) => event.id === id);
-    if(!event) {
-        return res.status(404).json({msg: `Not find evnet with id ${id}`})
-    }
-    event.name = name;
-    event.location = location;
-    res.status(200).json({msg: "Event is updated successfully"});
+    const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {new: true});
+    if(!updatedEvent) throw new NotFoundError(`No event find with id ${id}`);
+    res.status(StatusCodes.OK).json({msg: "Event is updated successfully", event: updateEvent});
 };

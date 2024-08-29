@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -17,10 +18,8 @@ app.use('*', (req, res) => {
     res.status(404).json({msg: "Not found"});
 });
 
-app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).json({msg: "Something went wrong"});
-}); 
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+app.use(errorHandlerMiddleware); 
 
 //Connect to mongoDB
 const port = process.env.PORT || 5100;
