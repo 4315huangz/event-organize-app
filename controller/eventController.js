@@ -1,4 +1,3 @@
-import { NotFoundError } from "../errors/customErrors.js";
 import Event from "../models/EventModels.js";
 import { StatusCodes } from "http-status-codes";
 

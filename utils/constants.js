@@ -11,3 +11,8 @@ export const EVENT_SORT_BY = {
     ASCENDING: "a-z",
     DESCENDING: "z-a",
 };
+
+export const ROLES = {
+    USER: "User",
+    ADMIN: "Admin"
+}

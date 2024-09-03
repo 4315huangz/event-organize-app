@@ -3,6 +3,7 @@ import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
 import {EVENT_STATUS} from '../utils/constants.js';
 import mongoose from 'mongoose';
 import Event from '../models/EventModels.js';
+import User from '../models/UserModels.js';
 
 const withValidationErrors = (validateValues) => {
     return [validateValues, 
@@ -36,5 +37,17 @@ export const validateIdParam = withValidationErrors([
         const event = await Event.findById(value);
         if(!event) throw new NotFoundError(`No event with id ${value}`)
     })
+]);
+
+export const validateRegisterInput = withValidationErrors([
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email format').custom(async (email) => {
+        const user = await User.findOne({email});
+        if(user) throw new BadRequestError('Email already exists');
+    }),
+    body('password').notEmpty().withMessage('Password is required')
+    .isLength({min: 8}).withMessage('Password is at least 8 characters long'),
+    body('lastName').notEmpty().withMessage('Last name is required')
 ]);
 

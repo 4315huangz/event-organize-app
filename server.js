@@ -11,9 +11,12 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 
+
 //import routers
 import eventRouter from './routes/eventRouter.js';
+import authRouter from './routes/authRouter.js';
 app.use('/api/v1/events', eventRouter);
+app.use('/api/v1/auth', authRouter);
 
 
 //Default error catch for invalid url
