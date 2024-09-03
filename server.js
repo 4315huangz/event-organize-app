@@ -10,10 +10,13 @@ if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+
 //import routers
 import eventRouter from './routes/eventRouter.js';
 app.use('/api/v1/events', eventRouter);
 
+
+//Default error catch for invalid url
 app.use('*', (req, res) => {
     res.status(404).json({msg: "Not found"});
 });

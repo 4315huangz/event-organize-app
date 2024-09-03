@@ -1,21 +1,20 @@
 import mongoose from "mongoose";
-
+import { EVENT_STATUS } from "../utils/constants.js";
 const EventScheme = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },
+    name: String,
     description: String,
     location: String,
     date: Date,
     eventHost: String,
     organizerEmail: String,
-    evnetStatus: {
+    eventStatus: {
       type: String,
-      enum: ["Completed", "Scheduled", "Canceled", "Postponed"],
-      default: "Scheduled",
+      enum: Object.values(EVENT_STATUS),
+      default: EVENT_STATUS.SCHEDULED,
       required: true,
     },
   },
   { timestamps: true }
 );
-
 export default mongoose.model("Event", EventScheme);
