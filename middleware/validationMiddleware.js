@@ -1,5 +1,5 @@
 import { body, param, validationResult } from 'express-validator';
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
+import { BadRequestError, NotFoundError, UnauthorizedError } from '../errors/customErrors.js';
 import {EVENT_STATUS} from '../utils/constants.js';
 import mongoose from 'mongoose';
 import Event from '../models/EventModels.js';
@@ -11,7 +11,8 @@ const withValidationErrors = (validateValues) => {
             const error = validationResult(req);
             if(!error.isEmpty()) {
                 const errorMessage = error.array().map((err) => err.msg);
-                if(errorMessage[0].startsWith('No event')) {throw new NotFoundError(errorMessage);}
+                if(errorMessage[0].startsWith('No event')) throw new NotFoundError(errorMessage);
+                if(errorMessage[0].startsWith('Not authorized')) throw new UnauthorizedError('Not authorized to access this resource');
                 throw new BadRequestError(errorMessage);
             }
             next();
@@ -30,12 +31,14 @@ export const validEventInput = withValidationErrors([
 
 
 export const validateIdParam = withValidationErrors([
-    param('id')
-    .custom(async (value) => {
+    param('id').custom(async (value, {req}) => {
         const isValidMongodbId = mongoose.Types.ObjectId.isValid(value);
-        if(!isValidMongodbId) {throw new BadRequestError('Invalid MongoDB id');}
+        if (!isValidMongodbId) throw new BadRequestError('Invalid MongoDB id');
         const event = await Event.findById(value);
-        if(!event) throw new NotFoundError(`No event with id ${value}`)
+        if(!event) throw new NotFoundError(`No event with id ${value}`);
+        const isAdmin = req.user.role === 'Admin';
+        const isOwener = req.user.userId === event.createdBy.toString();
+        if(!isAdmin && !isOwener) throw new UnauthorizedError('Not authroized to access this resource');
     })
 ]);
 
