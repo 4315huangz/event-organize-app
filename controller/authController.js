@@ -30,7 +30,10 @@ export const login = async (req, res) => {
     res.status(StatusCodes.OK).json({msg: 'User logged in'});
 }
 
-export const getAllUser = async (req, res) => {
-    const users = await User.find({});
-    res.status(StatusCodes.OK).json(users);
+export const logout = async (req, res) => {
+    res.cookie('token', 'logout', {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    });
+    res.status(StatusCodes.OK).json({msg: 'User logout'});
 }
