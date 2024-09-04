@@ -13,6 +13,7 @@ app.use(cookieParser());
 //routers
 import eventRouter from './routes/eventRouter.js';
 import authRouter from './routes/authRouter.js';
+import userRouter from './routes/userRouter.js';
 
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -24,6 +25,7 @@ if(process.env.NODE_ENV === 'development') {
 
 app.use('/api/v1/events', authenticateUser, eventRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', authenticateUser, userRouter);
 
 
 //Default error catch for invalid url
