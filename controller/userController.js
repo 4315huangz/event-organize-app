@@ -9,8 +9,10 @@ export const getCurrentUser = async (req, res) => {
     res.status(StatusCodes.OK).json({userWithoutPW});
 }
 
-export const getApplicationStatus = async (req, res) => {
-    res.status(StatusCodes.OK).json({msg: 'get status'});
+export const getAppStatus = async (req, res) => {
+    const users = await User.countDocuments();
+    const events = await Event.countDocuments();
+    res.status(StatusCodes.OK).json({users, events});
 }
 
 export const updateUser = async (req, res) => {
