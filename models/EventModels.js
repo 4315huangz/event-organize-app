@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { EVENT_STATUS } from "../utils/constants.js";
+
 const EventScheme = new mongoose.Schema(
   {
     name: String,
@@ -14,6 +15,10 @@ const EventScheme = new mongoose.Schema(
       default: EVENT_STATUS.SCHEDULED,
       required: true,
     },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    }
   },
   { timestamps: true }
 );

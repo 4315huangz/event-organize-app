@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { ROLES } from '../utils/constants.js';
 import {hashPassword, validatePassword} from '../utils/passwordUtils.js';
 import { UnauthenticatedError } from '../errors/customErrors.js';
+import { createJWT } from '../utils/jwtUtils.js';
 
 export const register = async (req, res) => {
     const isFirstUser = await User.countDocuments() === 0;
@@ -19,7 +20,14 @@ export const login = async (req, res) => {
 
     const isValidUser = user && (await validatePassword(req.body.password, user.password));
     if(!isValidUser) throw new UnauthenticatedError('invalid credentials');
-    res.send('login');
+
+    const token = createJWT({userId: user._id, role:user.role});
+    const oneDay = 1000 * 60 * 60 * 24;
+    res.cookie('token', token, {
+        httpOnly:true, 
+        expires:new Date(Date.now() + oneDay), 
+        secure: process.env.NODE_ENV === 'production'})
+    res.status(StatusCodes.OK).json({msg: 'User logged in'});
 }
 
 export const getAllUser = async (req, res) => {
