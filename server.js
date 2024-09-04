@@ -26,7 +26,9 @@ if(process.env.NODE_ENV === 'development') {
 app.use('/api/v1/events', authenticateUser, eventRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
-
+app.get('/api/v1/test', (req, res) => {
+    res.send({msg:"helloworld"});
+})
 
 //Default error catch for invalid url
 app.use('*', (req, res) => {
