@@ -1,5 +1,8 @@
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import * as Pages from './pages';
+import {action as registerAction} from './pages/Register';
+import {action as loginAction} from './pages/Login';
+import {loader as dashboardLoader} from './pages/DashboardLayout';
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
@@ -21,15 +24,18 @@ const router = createBrowserRouter([
       },
       {
         path:'login',
-        element:<Pages.Login />
+        element:<Pages.Login />,
+        action: loginAction
       },
       {
         path:'register',
-        element:<Pages.Register />
+        element:<Pages.Register />,
+        action: registerAction
       },
       {
         path: 'dashboard',
         element: <Pages.DashboardLayout />,
+        loader: dashboardLoader,
         children: [
           {
             index: true,

@@ -1,21 +1,42 @@
-import {Link} from "react-router-dom";
+import {Form, redirect, useNavigation, Link} from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterPageAndLoginPage";
 import {Logo, FormRow} from "../components";
+import axios from 'axios';
+import {toast} from 'react-toastify';
+
+export const action = async ({request}) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+        await axios.post('/api/v1/auth/register', data);
+        toast.success('Registration successful!')
+        return redirect('/login');
+    } catch (error) {
+        toast.error(error?.response?.data);
+        console.log(error);
+        return error;
+    }
+};
 
 const Register = () => {
+    const navigation = useNavigation();
+    console.log(navigation);
+    const isSumitting = navigation.state === 'submitting';
     return <Wrapper>
-        <form className="form">
+        <Form className="form" method="post">
             <Logo />
             <h4>Register</h4>
-            <FormRow name={"First Name"} defaultValue={"John"} type={"text"} />
-            <FormRow name={"Last Name"} defaultValue={"White"} type={"text"} />
-            <FormRow name={"Email"} defaultValue={"john@abc.com"} type={"email"} />
-            <FormRow name={"Password"} defaultValue={"abc@123"} type={"password"} />
-            <button type="submit" className="btn btn-block">Submit</button>
+            <FormRow name="name" defaultValue="John" type="text" />
+            <FormRow name="lastName" labelText="Last Name" defaultValue="White" type="text" />
+            <FormRow name="email" labelText="Email" defaultValue="john@abc.com" type="email" />
+            <FormRow name="password" labelText="Passwrod" defaultValue="secret123" type="password" />
+            <button type="submit" className="btn btn-block" disabled={isSumitting} >
+                {isSumitting? 'Submitting...' : 'Submit'}
+            </button>
             <p>Already a member? 
                 <Link to="/login" className="member-btn">Login</Link>
             </p>
-        </form>
+        </Form>
     </Wrapper>
 };
 
