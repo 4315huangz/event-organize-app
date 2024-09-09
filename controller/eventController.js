@@ -18,11 +18,11 @@ export const getEvent = async (req, res) => {
 };
 
 export const deleteEvent = async (req, res) => {
-    const removedEvent = await Event.findByIdAndDelete(req.params);
+    const removedEvent = await Event.findByIdAndDelete(req.params.id);
     res.status(StatusCodes.OK).json({msg: "Job is deleted", event: removedEvent});
 };
 
 export const updateEvent = async (req, res) => {
-    const updatedEvent = await Event.findByIdAndUpdate(req.params, req.body, {new: true});
+    const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, {new: true});
     res.status(StatusCodes.OK).json({msg: "Event is updated successfully", event: updatedEvent});
 };

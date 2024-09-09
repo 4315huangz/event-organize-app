@@ -4,7 +4,6 @@ export {default as Admin} from './Admin';
 export {default as AllEvents} from './AllEvents';
 export {default as DashboardLayout} from './DashboardLayout';
 export {useDashboardContext} from './DashboardLayout';
-export {default as DeleteEvent} from './DeleteEvent';
 export {default as EditEvent} from './EditEvent';
 export {default as Error} from './Error';
 export {default as HomeLayout} from './HomeLayout';

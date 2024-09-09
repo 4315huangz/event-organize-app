@@ -32,7 +32,7 @@ const AddEvent = () => {
             <FormRow type='text' name='name' defaultValue='Camping'></FormRow>
             <FormRow type='text' name='description' labelText='Event description' defaultValue='Autum camping beside lake'></FormRow>
             <FormRow type='text' name='location' labelText='Event location' defaultValue='Bay City'></FormRow>
-            <FormRow type='text' name='date' labelText='Event date' defaultValue='08/29/2024'></FormRow>
+            <FormRow type='text' name='date' labelText='Event date MM/DD/YYYY' defaultValue='08/29/2024'></FormRow>
             <FormRow type='text' name='eventHost' labelText='Hoster name' defaultValue={user.name}></FormRow>
             <FormRow type='text' name='organizerEmail' labelText='Hoster email' defaultValue={user.email}></FormRow>
             <FormRowSelect 

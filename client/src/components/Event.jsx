@@ -21,13 +21,13 @@ const Event = ({_id, name, description, location, date, eventHost, eventStatus, 
         <div className="content">
             <div className="content-center">
                 <EventInfo icon={<FaLocationArrow />} text={location}/>
-                <EventInfo icon={<FaCalendarAlt />} text={day(date).format('DD/MM/YYYY')}/>
+                <EventInfo icon={<FaCalendarAlt />} text={day(date).format('MM/DD/YYYY')}/>
                 <EventInfo icon={<FaBriefcase />} text={eventHost}/>
                 <div className={`status ${eventStatus}`}>{eventStatus}</div>
             </div>
             <footer className='actions'>
-            <Link className='btn edit-btn'>Edit</Link>
-            <Form>
+            <Link to={`/dashboard/edit-event/${_id}`} className='btn edit-btn'>Edit</Link>
+            <Form method='post' action={`/dashboard/delete-event/${_id}`}>
                 <button type='submit' className='btn delete-btn'>Delete</button>
             </Form>
             </footer>

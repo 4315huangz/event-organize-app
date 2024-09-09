@@ -3,8 +3,11 @@ import * as Pages from './pages';
 import {action as registerAction} from './pages/Register';
 import {action as loginAction} from './pages/Login';
 import { action as addEventAction } from './pages/AddEvent';
-import {loader as allEventsLoader} from './pages/AllEvents';
-import {loader as dashboardLoader} from './pages/DashboardLayout';
+import { action as editEventAction } from './pages/EditEvent';
+import { action as deleteEventAction} from './pages/DeleteEvent';
+import { loader as allEventsLoader} from './pages/AllEvents';
+import { loader as editEventLoader} from './pages/EditEvent';
+import { loader as dashboardLoader} from './pages/DashboardLayout';
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
@@ -45,6 +48,7 @@ const router = createBrowserRouter([
             action: addEventAction
           },
           {
+
             path: 'all-events',
             element: <Pages.AllEvents />,
             loader: allEventsLoader
@@ -60,6 +64,16 @@ const router = createBrowserRouter([
           {
             path:'admin',
             element:<Pages.Admin />
+          },
+          {
+            path:'edit-event/:id',
+            element:<Pages.EditEvent/>,
+            action: editEventAction,
+            loader: editEventLoader
+          },
+          {
+            path:'delete-event/:id',
+            action:deleteEventAction
           }
         ]
       }
