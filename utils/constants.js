@@ -6,10 +6,10 @@ export const EVENT_STATUS = {
 };
 
 export const EVENT_SORT_BY = {
-    NEWEST_FIRST: "newest",
-    OLDEST_FIRST: "oldest",
-    ASCENDING: "a-z",
-    DESCENDING: "z-a",
+    NEWEST_FIRST: "Newest",
+    OLDEST_FIRST: "Oldest",
+    ASCENDING: "A-Z",
+    DESCENDING: "Z-A",
 };
 
 export const ROLES = {
