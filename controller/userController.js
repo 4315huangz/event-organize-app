@@ -1,6 +1,8 @@
 import {StatusCodes} from 'http-status-codes';
 import User from '../models/UserModels.js';
 import Event from '../models/EventModels.js';
+import cloudinary from 'cloudinary';
+import {promises as fs} from 'fs';
 
 
 export const getCurrentUser = async (req, res) => {
@@ -16,9 +18,20 @@ export const getAppStatus = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-    const obj = {...req.body};
-    delete obj.password;
-    console.log(obj);
-    const updatedUser = await User.findByIdAndUpdate(req.user.userId, obj);
+    const newUser = {...req.body};
+    delete newUser.password;
+    //only upload the image if the user sending it, and if uploaded successfully to cloud, remove the local copy
+    if(req.file) {
+        const response = await cloudinary.v2.uploader.upload(req.file.path);
+        await fs.unlink(req.file.path);
+        newUser.avatar = response.secure_url;
+        newUser.avatarPublicId = response.public_id;
+    }
+    const oldUser = await User.findByIdAndUpdate(req.user.userId, newUser);
+
+    //remove old images
+    if(req.file && oldUser.avatarPublicId) {
+        await cloudinary.v2.uploader.destroy(oldUser.avatarPublicId);
+    }
     res.status(StatusCodes.OK).json({msg: 'The user is updated successfully.'});
 }

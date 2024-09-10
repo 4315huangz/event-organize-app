@@ -5,10 +5,12 @@ import {action as loginAction} from './pages/Login';
 import { action as addEventAction } from './pages/AddEvent';
 import { action as editEventAction } from './pages/EditEvent';
 import { action as deleteEventAction} from './pages/DeleteEvent';
+import { action as profileAction} from './pages/Profile';
 import { loader as allEventsLoader} from './pages/AllEvents';
 import { loader as editEventLoader} from './pages/EditEvent';
 import { loader as dashboardLoader} from './pages/DashboardLayout';
 import { loader as adminLoader} from './pages/Admin';
+
 
 
 export const checkDefaultTheme = () => {
@@ -57,7 +59,8 @@ const router = createBrowserRouter([
           },
           {
             path: 'profile',
-            element: <Pages.Profile />
+            element: <Pages.Profile />,
+            action: profileAction
           },
           {
             path: 'stats',
