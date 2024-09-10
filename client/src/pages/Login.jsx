@@ -1,4 +1,4 @@
-import {Form, redirect, useNavigation, Link} from "react-router-dom";
+import {Form, redirect, useNavigation, Link, useNavigate} from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterPageAndLoginPage";
 import {Logo, FormRow} from "../components";
 import axios from "axios";
@@ -20,6 +20,21 @@ export const action = async ({request}) => {
 const Login = () => {
     const navigation = useNavigation();
     const isSubmitting = navigation.state === 'submitting';
+
+    const navigate = useNavigate();
+    const loginDemoUser = async () => {
+        const data = {
+            email: 'test@test.com',
+            password: 'secret123'
+        }
+        try {
+            await axios.post('/api/v1/auth/login', data);
+            toast.success('Take a test drive!');
+            navigate('/dashboard');
+        } catch (error) {
+            toast.error(error?.response?.data);
+        }
+    }
     return <Wrapper>
     <Form className="form" method="post">
         <Logo />
@@ -29,7 +44,7 @@ const Login = () => {
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
             {isSubmitting? "Logging" : "Login"}
         </button>
-        <button type="button" className="btn btn-block">Explore the app</button>
+        <button type="button" className="btn btn-block" onClick={loginDemoUser}>Explore the app</button>
         <p>Not a member yet? 
             <Link to="/register" className="member-btn">Register</Link>
         </p>
