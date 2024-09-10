@@ -2,7 +2,36 @@ import Event from "../models/EventModels.js";
 import { StatusCodes } from "http-status-codes";
 
 export const getAllEvents = async (req, res) => {
-    const events = await Event.find({createdBy: req.user.userId});
+    const {name, location, eventStatus, sort} = req.query;
+    const queryObj = {createdBy: req.user.userId};
+    if(name && location) {
+        queryObj.$and = [
+            { name: { $regex: new RegExp(name, 'i') } },
+            { location: { $regex: new RegExp(location, 'i') } }
+        ];
+    }else if (name || location) {
+        queryObj.$or = [];
+        if (name) {
+            queryObj.$or.push({ name: { $regex: new RegExp(name, 'i') } });
+        }
+        if (location) {
+            queryObj.$or.push({ location: { $regex: new RegExp(location, 'i') } });
+        }
+    }
+    if(eventStatus && eventStatus !== 'all') {
+        queryObj.eventStatus = { $regex: new RegExp(eventStatus, 'i') };;
+    }
+
+    const sortOptions = {
+        newest: '-date',
+        oldest: 'date',
+        'a-z': name,
+        'z-a': -name
+    }
+    const sortKey = sortOptions[sort] || sortOptions.newest;
+
+    console.log(queryObj);
+    const events = await Event.find(queryObj).sort(sortKey);
     res.status(StatusCodes.OK).json({ events });
 };
 
