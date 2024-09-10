@@ -8,6 +8,8 @@ import { action as deleteEventAction} from './pages/DeleteEvent';
 import { loader as allEventsLoader} from './pages/AllEvents';
 import { loader as editEventLoader} from './pages/EditEvent';
 import { loader as dashboardLoader} from './pages/DashboardLayout';
+import { loader as adminLoader} from './pages/Admin';
+
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
@@ -63,7 +65,8 @@ const router = createBrowserRouter([
           },
           {
             path:'admin',
-            element:<Pages.Admin />
+            element:<Pages.Admin />,
+            loader:adminLoader
           },
           {
             path:'edit-event/:id',

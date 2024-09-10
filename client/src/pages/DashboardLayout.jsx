@@ -34,14 +34,14 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar);
     };
-    const logutUser = async () => {
+    const logoutUser = async () => {
         navigate('/');
         await axios.get('/api/v1/auth/logout');
         toast.success('Logging out...');
     };
 
 
-    return <DashboardContext.Provider value={{user, showSidebar, isDarkTheme, toggleDarkTheme, toggleSidebar,logutUser}}>
+    return <DashboardContext.Provider value={{user, showSidebar, isDarkTheme, toggleDarkTheme, toggleSidebar,logoutUser}}>
     <Wrapper>
         <main className="dashboard">
             <SmallSidebar />
