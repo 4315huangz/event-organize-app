@@ -40,7 +40,12 @@ app.use('/api/v1/events', authenticateUser, eventRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
 app.get('/api/v1/test', (req, res) => {
-    res.send({msg:"helloworld"});
+    res.send({msg:"test route"});
+})
+
+
+app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, './public','index.html'))
 })
 
 //Default error catch for invalid url
