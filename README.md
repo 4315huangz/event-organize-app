@@ -6,8 +6,7 @@ This is a React-based front-end application for organizing events. The applicati
 
 - User authentication and login
 - Event content management
-- Equipment and food item tracking
-- Expense management and splitting
+- User profile management
 
 ## Prerequisites
 
@@ -42,5 +41,5 @@ Start the development server to run the application locally:
 ```bash
 npm run dev
 ```
-Open your browser and go to http://localhost:5173 to access the application.
+Open your browser and go to http://localhost:5100 to access the application.
 
