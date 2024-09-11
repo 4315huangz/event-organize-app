@@ -26,10 +26,10 @@ const Register = () => {
         <Form className="form" method="post">
             <Logo />
             <h4>Register</h4>
-            <FormRow name="name" defaultValue="John" type="text" />
-            <FormRow name="lastName" labelText="Last Name" defaultValue="White" type="text" />
-            <FormRow name="email" labelText="Email" defaultValue="john@abc.com" type="email" />
-            <FormRow name="password" labelText="Passwrod" defaultValue="secret123" type="password" />
+            <FormRow name="name"  labelText="first name" type="text" />
+            <FormRow name="lastName" labelText="last Name" type="text" />
+            <FormRow name="email" labelText="email" type="email" />
+            <FormRow name="password" labelText="passwrod"  type="password" />
             <button type="submit" className="btn btn-block" disabled={isSumitting} >
                 {isSumitting? 'Submitting...' : 'Submit'}
             </button>

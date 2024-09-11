@@ -29,12 +29,12 @@ const AddEvent = () => {
         <Form method='post' className = 'form'>
             <h4 className="form-title">Add event</h4>
             <div className="form-center">
-            <FormRow type='text' name='name' defaultValue='Camping'></FormRow>
-            <FormRow type='text' name='description' labelText='Event description' defaultValue='Autum camping beside lake'></FormRow>
-            <FormRow type='text' name='location' labelText='Event location' defaultValue='Bay City'></FormRow>
-            <FormRow type='text' name='date' labelText='Event date MM/DD/YYYY' defaultValue='08/29/2024'></FormRow>
-            <FormRow type='text' name='eventHost' labelText='Hoster name' defaultValue={user.name}></FormRow>
-            <FormRow type='text' name='organizerEmail' labelText='Hoster email' defaultValue={user.email}></FormRow>
+            <FormRow type='text' name='name' ></FormRow>
+            <FormRow type='text' name='description' labelText='Event description'></FormRow>
+            <FormRow type='text' name='location' labelText='Event location' ></FormRow>
+            <FormRow type='text' name='date' labelText='Event date MM/DD/YYYY' ></FormRow>
+            <FormRow type='text' name='eventHost' labelText='Hoster name' ></FormRow>
+            <FormRow type='text' name='organizerEmail' labelText='Hoster email' ></FormRow>
             <FormRowSelect 
                 name='eventStatus' 
                 labelText='Event Status' 
