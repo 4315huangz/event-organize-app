@@ -5,10 +5,16 @@ import { useContext, createContext } from "react";
 import { toast } from "react-toastify";
 
 
-export const loader = async () => {
+export const loader = async ({request}) => {
+    const params = Object.fromEntries([
+        ...new URL(request.url).searchParams.entries()
+    ]);
+    
     try {
-        const {data} = await axios.get('/api/v1/events');
-        return {data};
+        const {data} = await axios.get('/api/v1/events', {
+            params
+        });
+        return {data, searchParams: {...params}};
     } catch (error) {
         toast.error(error?.response?.data);
         return error;
@@ -16,9 +22,9 @@ export const loader = async () => {
 }
 const AllEventsContext = createContext();
 const AllEvents = () => {
-    const {data} = useLoaderData();
+    const {data, searchParams} = useLoaderData();
 
-    return <AllEventsContext.Provider value={{data}}>
+    return <AllEventsContext.Provider value={{data, searchParams}}>
         <SearchContainer />
         <EventsContainer />
     </AllEventsContext.Provider>;

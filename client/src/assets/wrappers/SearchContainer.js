@@ -1,7 +1,10 @@
 import styled from "styled-components";
 
 const Wrapper = styled.article`
-    .form {
+    form h5{
+        margin-bottom: 2rem;
+    }
+    .form-center {
         display: grid;
         grid-template-columns: 1fr;
         align-items: center;

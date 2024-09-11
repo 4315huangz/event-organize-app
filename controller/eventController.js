@@ -18,7 +18,7 @@ export const getAllEvents = async (req, res) => {
             queryObj.$or.push({ location: { $regex: new RegExp(location, 'i') } });
         }
     }
-    if(eventStatus && eventStatus !== 'all') {
+    if(eventStatus && eventStatus !== 'All') {
         queryObj.eventStatus = { $regex: new RegExp(eventStatus, 'i') };;
     }
 
@@ -30,9 +30,15 @@ export const getAllEvents = async (req, res) => {
     }
     const sortKey = sortOptions[sort] || sortOptions.newest;
 
-    console.log(queryObj);
-    const events = await Event.find(queryObj).sort(sortKey);
-    res.status(StatusCodes.OK).json({ events });
+    //Setup pagination
+    const pageNum = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (pageNum - 1) * limit;
+    
+    const events = await Event.find(queryObj).sort(sortKey).skip(skip).limit(limit);
+    const totalEvents = await Event.countDocuments(queryObj);
+    const numOfPages = Math.ceil(totalEvents / limit);
+    res.status(StatusCodes.OK).json({totalEvents, numOfPages, currentPage: pageNum, events });
 };
 
 export const createEvent = async (req, res) => {
