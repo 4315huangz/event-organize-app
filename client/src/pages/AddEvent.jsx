@@ -10,6 +10,13 @@ import FormRowSelect from "../components/FormRowSelect";
 export const action = async ({request}) => {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
+    if( data.participants === "") {
+         data.participants = [];
+    } else {
+        data.participants = data.participants.split(',').map(email => email.trim());
+    }
+    console.log(data)
+
     try {
         await axios.post('/api/v1/events', data);
         toast.success('Event is added successfull');
@@ -32,9 +39,14 @@ const AddEvent = () => {
             <FormRow type='text' name='name' ></FormRow>
             <FormRow type='text' name='description' labelText='Event description'></FormRow>
             <FormRow type='text' name='location' labelText='Event location' ></FormRow>
-            <FormRow type='text' name='date' labelText='Event date MM/DD/YYYY' ></FormRow>
+            <FormRow type='text' name='date' labelText='Event date' placeholder='MM/DD/YYYY' ></FormRow>
             <FormRow type='text' name='eventHost' labelText='Hoster name' ></FormRow>
-            <FormRow type='text' name='organizerEmail' labelText='Hoster email' ></FormRow>
+            <FormRow
+                    type='text'
+                    name='participants'
+                    labelText='Participants (separate emails with commas)'
+                    placeholder='e.g. alice@gmail.com, bob@gmail.com'
+            />
             <FormRowSelect 
                 name='eventStatus' 
                 labelText='Event Status' 

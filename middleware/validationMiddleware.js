@@ -25,8 +25,18 @@ export const validEventInput = withValidationErrors([
     body('location').notEmpty().withMessage('Event location is required.'),
     body('date').notEmpty().withMessage('Event date is required.'),
     body('eventHost').notEmpty().withMessage('Hoster name is required.'),
-    body('organizerEmail').notEmpty().withMessage('Email is required.'),
-    body('eventStatus').isIn(Object.values(EVENT_STATUS)).withMessage('Invalid status value')
+    body('eventStatus').isIn(Object.values(EVENT_STATUS)).withMessage('Invalid status value'),
+    body('participants')
+    .optional()
+    .isArray().withMessage('Participants must be an array')
+    .bail()
+    .custom((participants) => {
+        const invalidEmails = participants.filter(participant => !/^\S+@\S+\.\S+$/.test(participant));
+        if (invalidEmails.length > 0) {
+                throw new BadRequestError(`Invalid email format(s): ${invalidEmails.join(', ')}`);
+            }
+            return true;
+    })
 ]);
 
 

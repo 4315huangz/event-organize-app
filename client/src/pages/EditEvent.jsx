@@ -24,7 +24,12 @@ export const loader = async ({params}) => {
 export const action = async ({request, params}) => {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
-    console.log(data);
+    if( data.participants === "") {
+        data.participants = [];
+   } else {
+       data.participants = data.participants.split(',').map(email => email.trim());
+   }
+    
     try {
         await axios.patch(`/api/v1/events/${params.id}`, data);
         toast.success("Event updated successfully!");
@@ -49,8 +54,16 @@ const EditEvent = () => {
                 <FormRow type='text' labelText='event location' name='location' defaultValue={event.location}></FormRow>
                 <FormRow type='text' labelText='event date in MM/DD/YYYY' name='date' defaultValue={day(event.date).format('MM/DD/YYYY')}></FormRow>
                 <FormRow type='text' labelText='Hoster name' name='eventHost' defaultValue={event.eventHost}></FormRow>
-                <FormRow type='text' labelText='hoster email' name='organizerEmail' defaultValue={event.organizerEmail}></FormRow>
-                <FormRowSelect name='eventStatus' labelText='event status' defaultValue={event.eventStatus} list={Object.values(EVENT_STATUS)}>
+                <FormRow
+                    type='text'
+                    name='participants'
+                    labelText='Participants (separate emails with commas)'
+                />
+                <FormRowSelect 
+                    name='eventStatus' 
+                    labelText='event status' 
+                    defaultValue={event.eventStatus} 
+                    list={Object.values(EVENT_STATUS)}>
                 </FormRowSelect>
                 <button type="submit" className="btn btn-block form-btn" disabled={isSubmitting}>
                     {isSubmitting? "Submitting..." : "Submit"}

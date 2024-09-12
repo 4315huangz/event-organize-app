@@ -1,9 +1,14 @@
+import { BadRequestError } from "../errors/customErrors.js";
 import Event from "../models/EventModels.js";
 import { StatusCodes } from "http-status-codes";
+import User from "../models/UserModels.js";
 
 export const getAllEvents = async (req, res) => {
     const {name, location, eventStatus, sort} = req.query;
-    const queryObj = {createdBy: req.user.userId};
+    const queryObj = {$or:[
+        {createdBy: req.user.userId},
+        {participants: { $in: [req.user.userId] }}
+    ]};
     if(name && location) {
         queryObj.$and = [
             { name: { $regex: new RegExp(name, 'i') } },
@@ -36,6 +41,8 @@ export const getAllEvents = async (req, res) => {
     const skip = (pageNum - 1) * limit;
     
     const events = await Event.find(queryObj).sort(sortKey).skip(skip).limit(limit);
+
+    
     const totalEvents = await Event.countDocuments(queryObj);
     const numOfPages = Math.ceil(totalEvents / limit);
     res.status(StatusCodes.OK).json({totalEvents, numOfPages, currentPage: pageNum, events });
@@ -43,6 +50,18 @@ export const getAllEvents = async (req, res) => {
 
 export const createEvent = async (req, res) => {
     req.body.createdBy = req.user.userId;
+    if(req.body.participants && req.body.participants.length > 0) {
+        const participants = req.body.participants;
+        const existUsers = await User.find({ email: { $in: participants } });
+        const existUserEmails = new Set(existUsers.map(user => user.email));
+        const missingEmails = participants.filter(email => !existUserEmails.has(email));
+        const participantUser = existUsers.map(user => (user._id));
+
+        if (missingEmails.length > 0) {
+            throw new BadRequestError(`Emails not registered: ${missingEmails.join(', ')}`);
+        }
+        req.body.participants = participantUser;
+    }
     const event = await Event.create(req.body);
     res.status(StatusCodes.CREATED).json({event});
 };

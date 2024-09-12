@@ -8,7 +8,10 @@ const EventScheme = new mongoose.Schema(
     location: String,
     date: Date,
     eventHost: String,
-    organizerEmail: String,
+    participants: [{
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    }],
     eventStatus: {
       type: String,
       enum: Object.values(EVENT_STATUS),
