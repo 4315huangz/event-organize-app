@@ -9,7 +9,7 @@ const Wrapper = styled.button`
     place-items: center;
     cursor: pointer;
     .toggle-icon{
-        font-size: 1.15;
+        font-size: 1.15rem;
         color: var(--text-color);
     }
 `;
